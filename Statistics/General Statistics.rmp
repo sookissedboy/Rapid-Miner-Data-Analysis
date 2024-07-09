@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="10.4.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="10.4.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="10.4.001" expanded="true" height="68" name="Retrieve footballmathces" width="90" x="112" y="34">
+        <parameter key="repository_entry" value="../ML classification analysis footballmatches/footballmathces"/>
+      </operator>
+      <operator activated="true" class="time_series:extract_std_descriptive_features" compatibility="10.3.001" expanded="true" height="82" name="Extract Aggregates" width="90" x="246" y="34">
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="sum" value="true"/>
+        <parameter key="mean" value="true"/>
+        <parameter key="geometric_mean" value="true"/>
+        <parameter key="first_quartile" value="true"/>
+        <parameter key="median" value="true"/>
+        <parameter key="third_quartile" value="true"/>
+        <parameter key="min" value="true"/>
+        <parameter key="max" value="true"/>
+        <parameter key="std_deviation" value="true"/>
+        <parameter key="kurtosis" value="true"/>
+        <parameter key="skewness" value="true"/>
+        <parameter key="add_time_series_name" value="false"/>
+        <parameter key="ignore_invalid_values" value="false"/>
+      </operator>
+      <connect from_op="Retrieve footballmathces" from_port="output" to_op="Extract Aggregates" to_port="example set"/>
+      <connect from_op="Extract Aggregates" from_port="features" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>
