@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="10.4.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="10.4.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="10.4.001" expanded="true" height="68" name="Retrieve Titanic Training" width="90" x="45" y="34">
+        <parameter key="repository_entry" value="//Samples/data/Titanic Training"/>
+      </operator>
+      <operator activated="true" class="python_scripting:execute_python" compatibility="10.1.001" expanded="true" height="103" name="Execute Python" width="90" x="246" y="34">
+        <parameter key="script" value="import pandas as pd&#10;from sklearn.model_selection import train_test_split&#10;from sklearn.preprocessing import LabelEncoder&#10;from sklearn.ensemble import RandomForestClassifier&#10;from sklearn.metrics import accuracy_score&#10;&#10;def rm_main(data):&#10;    data.dropna(inplace=True)&#10;&#10;    label_encoder = LabelEncoder()&#10;    data['Passenger Class'] = data['Passenger Class'].map({1: 'First', 2: 'Second', 3: 'Third'})&#10;    data['Passenger Class'] = label_encoder.fit_transform(data['Passenger Class'])&#10;    data['Sex'] = label_encoder.fit_transform(data['Sex'])&#10;    &#10;    X = data.drop('Survived', axis=1)&#10;    y = data['Survived']&#10;    &#10;    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)&#10;    &#10;    model = RandomForestClassifier()&#10;    model.fit(X_train, y_train)&#10;    &#10;    y_pred = model.predict(X_test)&#10;    &#10;    accuracy = accuracy_score(y_test, y_pred)&#10;    result = pd.DataFrame({'Accuracy': [accuracy]})&#10;    &#10;    return result, data&#10;"/>
+        <parameter key="notebook_cell_tag_filter" value=""/>
+        <parameter key="use_default_python" value="true"/>
+        <parameter key="package_manager" value="conda (anaconda)"/>
+        <parameter key="use_macros" value="false"/>
+      </operator>
+      <connect from_op="Retrieve Titanic Training" from_port="output" to_op="Execute Python" to_port="input 1"/>
+      <connect from_op="Execute Python" from_port="output 1" to_port="result 1"/>
+      <connect from_op="Execute Python" from_port="output 2" to_port="result 2"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>
